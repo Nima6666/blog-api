@@ -20,7 +20,7 @@ router.use(
   session({
     secret: process.env.SECRET,
     saveUninitialized: false,
-    resave: false,
+    resave: true,
     cookie: {
       secure: true,
       maxAge: 60 * 60 * 1000,
