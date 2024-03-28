@@ -50,10 +50,12 @@ module.exports.getLoggedInUser = async (req, res) => {
   }
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = async (req, res) => {
   try {
-    console.log(req.user);
-    res.json(req.user);
+    console.log(req.session.passport.user);
+    const authenticatedUser = await User.findById(req.session.passport.user);
+    console.log(authenticatedUser);
+    res.json(authenticatedUser);
   } catch (err) {
     res.error(err);
   }
