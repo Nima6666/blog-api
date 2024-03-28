@@ -22,6 +22,7 @@ router.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
+      secure: true,
       maxAge: 60 * 60 * 1000,
       creationDate: Date.now(),
     },
