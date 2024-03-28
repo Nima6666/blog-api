@@ -1,8 +1,19 @@
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const router = require("express").Router();
 const userController = require("../../controller/userController");
 const passport = require("passport");
 const { default: axios } = require("axios");
+
+const store = new MongoDBStore({
+  uri: process.env.MONGO_URL,
+  collection: "sessions",
+});
+
+store.on("error", function (error) {
+  console.log(error);
+});
+
 router.use(
   session({
     secret: process.env.SECRET,
@@ -12,6 +23,7 @@ router.use(
       maxAge: 60 * 60 * 1000,
       creationDate: Date.now(),
     },
+    store: store,
   })
 );
 
@@ -54,7 +66,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:3030/failed",
+    failureRedirect: `${process.env.USER_ORIGIN}/failed`,
   }),
   async (req, res) => {
     try {
@@ -69,7 +81,7 @@ router.get(
 
       // Validate the tokenInfo as needed
       if (tokenInfo.aud === process.env.GOOGLE_CLIENT_ID) {
-        res.redirect(`http://localhost:3030/`);
+        res.redirect(`${process.env.USER_ORIGIN}/`);
       } else {
         res.status(401).json({ error: "Unauthorized" });
       }
