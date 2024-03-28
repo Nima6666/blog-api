@@ -9,7 +9,7 @@ const GoogleStrat = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET_KEY,
-    callbackURL: "http://localhost:3000/api/google/callback",
+    callbackURL: `${process.env.USER_ORIGIN}/api/google/callback`,
     passReqToCallback: true,
   },
   async (req, accessToken, refreshToken, profile, cb) => {
