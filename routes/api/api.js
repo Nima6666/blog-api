@@ -116,7 +116,17 @@ router.post(
   userController.getLoggedInUser
 );
 
-router.get("/session", auth.isAuthenticatedGoog, userController.getCurrentUser);
+const noCacheMiddleware = (req, res, next) => {
+  res.setHeader("Cache-Control", "no-cache, no-store");
+  next();
+};
+
+router.get(
+  "/session",
+  noCacheMiddleware,
+  auth.isAuthenticatedGoog,
+  userController.getCurrentUser
+);
 
 router.post("/logout", auth.isAuthenticatedGoog, userController.logout);
 
