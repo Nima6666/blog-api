@@ -51,6 +51,9 @@ module.exports.getLoggedInUser = async (req, res) => {
 };
 
 module.exports.getCurrentUser = async (req, res) => {
+  console.log("getting user");
+  console.log(req.user);
+  console.log(req.session);
   try {
     console.log(req.session.passport.user);
     const authenticatedUser = await User.findById(req.session.passport.user);
