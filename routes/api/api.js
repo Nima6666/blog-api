@@ -15,6 +15,7 @@ const store = new MongoDBStore({
 store.on("error", function (error) {
   console.log(error);
 });
+// router.set("trust proxy", 1);
 
 router.use(
   session({
@@ -22,6 +23,7 @@ router.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
+      secure: true,
       maxAge: 60 * 60 * 1000,
       creationDate: Date.now(),
     },
@@ -116,6 +118,7 @@ router.post(
 );
 
 const noCacheMiddleware = (req, res, next) => {
+  console.log("no cache");
   res.setHeader("Cache-Control", "no-cache, no-store");
   next();
 };
