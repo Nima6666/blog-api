@@ -8,6 +8,8 @@ const { default: axios } = require("axios");
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL,
   collection: "sessions",
+  autoRemove: "interval",
+  autoRemoveInterval: 60,
 });
 
 store.on("error", function (error) {

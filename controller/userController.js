@@ -52,6 +52,7 @@ module.exports.getLoggedInUser = async (req, res) => {
 
 module.exports.getCurrentUser = (req, res) => {
   try {
+    console.log(req.user);
     res.json(req.user);
   } catch (err) {
     res.error(err);
