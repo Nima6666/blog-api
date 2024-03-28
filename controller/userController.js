@@ -21,8 +21,10 @@ module.exports.getPost = async (req, res) => {
 
   try {
     const postFoundUsingID = await post.findById(id);
-
-    if (!postFoundUsingID) {
+    if (
+      !postFoundUsingID ||
+      (postFoundUsingID && !postFoundUsingID.published)
+    ) {
       return res.status(404).json({
         success: false,
         message: "post not found",
@@ -71,6 +73,13 @@ module.exports.logout = (req, res) => {
 
 module.exports.createUser = async (req, res) => {
   try {
+    const userFound = await User.findOne({ email: req.body.email });
+    if (userFound) {
+      return res.json({
+        success: false,
+        message: "user already registered for this email",
+      });
+    }
     bcrypt.hash(req.body.password, 10, async (err, hashedpassword) => {
       if (err) {
         return res.json(err);
@@ -83,6 +92,7 @@ module.exports.createUser = async (req, res) => {
       try {
         await user.save();
         return res.json({
+          success: true,
           message: "User created successfully",
         });
       } catch (err) {
